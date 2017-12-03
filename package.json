@@ -1,0 +1,22 @@
+{
+  "name": "chronotron",
+  "version": "0.0.1",
+  "description": "An HTML5 Canvas web app for correlating multiple timelines",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Inityx/chronotron.git"
+  },
+  "author": "Andrew Tolvstad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Inityx/chronotron/issues"
+  },
+  "homepage": "https://github.com/Inityx/chronotron#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}

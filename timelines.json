@@ -1,0 +1,14 @@
+{
+  "Microsoft Windows": {
+    "Consumer": {
+      "Release": [
+        { "name": "Windows XP", "start_time": "2001-10-25", "end_time": "2007-01-30" },
+        { "name": "Windows Vista", "start_time": "2007-01-30", "end_time": "2009-10-22" }
+      ],
+      "Kernel": [
+        { "name": "MS-DOS", "start_time": "1985-11-20", "end_time": "2001-10-25" },
+        { "name": "Windows NT", "start_time": "2000-02-17", "end_time": "Current" }
+      ]
+    }
+  }
+}
