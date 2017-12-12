@@ -112,6 +112,7 @@ const Menu = {
         const menu_trail = Menu.recursive_trail(menu_entry);
         const timeline_data = await timeline_query(menu_trail);
         TimelineStore.inject(timeline_data, menu_trail);
+        Viewport.render();
     },
 
     disable_timeline: function(click_event) {
@@ -127,6 +128,7 @@ const Menu = {
         // Delete timeline object
         const menu_trail = Menu.recursive_trail(menu_entry);
         TimelineStore.gc_delete(menu_trail);
+        Viewport.render();
     },
 
     // Entry toggle
@@ -176,34 +178,55 @@ const Menu = {
 
 const Viewport = {
     // Attributes and setters
-    timelines: undefined,
     canvas: undefined,
-    
-    bind_timelines: function(timelines) {
-        if (Viewport.timelines) throw 'Viewport.timelines has already been bound';
-        Viewport.timelines = timelines;
-    },
-
-    bind_canvas: function(canvas) {
-        if (Viewport.canvas) throw 'Viewport.canvas has already been bound';
-        Viewport.canvas = canvas;
-    },
+    context: undefined,
+    pixels_per_day: 1.0,
+    timeline_start: new Date(1990,0),
 
     // Viewport actions
-    calibrate: function() {
+    initialize: function(canvas) {
+        Viewport.canvas = canvas;
+        Viewport.context = Viewport.canvas.getContext('2d');
+        window.addEventListener('resize', Viewport.calibrate);
+        Viewport.calibrate();
+    },
 
+    calibrate: function() {
+        const ratio = window.devicePixelRatio;
+        const canvas_style = window.getComputedStyle(Viewport.canvas);
+
+        Viewport.canvas.width = parseFloat(canvas_style.width) * ratio;
+        Viewport.canvas.height = parseFloat(canvas_style.height) * ratio;
+
+        Viewport.render();
     },
 
     render: function() {
+        Viewport.context.clearRect(
+            0, 0,
+            Viewport.canvas.width,
+            Viewport.canvas.height
+        );
 
+        // Draw each timeline
+        JSON.stringify(TimelineStore.root, null, 4)
+            .split('\n')
+            .forEach((line_text, index) =>
+                Viewport.context.fillText(
+                    line_text,
+                    200,
+                    50 + (index * 12)
+                )
+            );
     },
 };
 
-// Document ready function
-(fn => {
+function document_ready_do(fn) {
     if (document.readyState != 'loading') fn();
     else document.addEventListener('DOMContentLoaded', fn);
-})(() => {
+}
+
+document_ready_do(() => {
     Menu.add_child_menu('', document.getElementById('content-menu'));
-    Viewport.bind_canvas(document.getElementById('viewport'));
+    Viewport.initialize(document.getElementById('viewport'));
 });
